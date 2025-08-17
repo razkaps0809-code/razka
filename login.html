@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Akun — Dark Modern</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0b0f14;
+            --panel: #0f1720;
+            --muted: #98a0ab;
+            --accent: #00b4ff;
+            --danger: #ff5c5c;
+            --card: #121820;
+            --glass: rgba(255, 255, 255, 0.03);
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        }
+
+        body {
+            background: linear-gradient(180deg, #071018 0%, #0b1016 60%);
+            color: #e6eef6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        header.appbar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.02), transparent);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(6px);
+        }
+
+        header.appbar h1 {
+            font-size: 16px;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        header.appbar .subtitle {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .container {
+            padding: 16px;
+            overflow: auto;
+            flex: 1 1 auto;
+            padding-bottom: 80px;
+        }
+
+        .profile {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
+            border-radius: 12px;
+            padding: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: 0 6px 18px rgba(2, 8, 23, 0.5);
+            margin-bottom: 14px;
+            animation: slideUp .45s ease both;
+        }
+
+        .avatar {
+            width: 74px;
+            height: 74px;
+            border-radius: 18px;
+            flex: 0 0 74px;
+            background: linear-gradient(180deg, #0b3b5a, #004d7a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .profile .info h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .profile .info p {
+            margin: 6px 0 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .menu .item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 10px;
+            background: var(--card);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            transition: transform .15s ease, box-shadow .15s ease;
+            cursor: pointer;
+        }
+
+        .menu .item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .menu .item i {
+            font-size: 18px;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+            color: var(--accent);
+        }
+
+        .menu .meta {
+            flex: 1
+        }
+
+        .menu .meta .title {
+            font-weight: 600;
+        }
+
+        .menu .meta .desc {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        .center-actions {
+            margin: 18px 0;
+            display: flex;
+            gap: 12px;
+            flex-direction: column;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--accent), #006fbf);
+            color: #001219;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            box-shadow: 0 8px 30px rgba(0, 180, 255, 0.12);
+            cursor: pointer;
+            transition: transform .14s ease, box-shadow .14s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 18px 50px rgba(0, 180, 255, 0.18);
+        }
+
+        .btn-danger {
+            background: linear-gradient(90deg, var(--danger), #c73b3b);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform .14s ease;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 30px rgba(255, 80, 80, 0.12);
+        }
+
+        .footer-menu {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(45deg, #0d1b2a, #1b263b);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 8px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 999;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .footer-item {
+            flex: 1;
+            text-align: center;
+            color: #bbb;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .footer-item i {
+            display: block;
+            font-size: 20px;
+            margin-bottom: 2px;
+            transition: transform 0.2s ease, color 0.3s ease;
+        }
+
+        .footer-item.active,
+        .footer-item:hover {
+            color: #00b4d8;
+        }
+
+        .footer-item.active i,
+        .footer-item:hover i {
+            color: #00b4d8;
+        }
+
+        .footer-item:active i {
+            transform: scale(1.2);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="appbar">
+        <div style="display:flex;flex-direction:column;">
+            <h1>Profil Saya</h1>
+            <span class="subtitle">Kelola akun & pengaturan</span>
+        </div>
+    </header>
+
+    <main class="container" id="appMain">
+
+        <section class="profile" id="profileBlock">
+            <div class="avatar" id="avatarEl"><i class="fa-solid fa-user"></i></div>
+            <div class="info">
+                <h2 id="fullname">Guest</h2>
+                <p id="emailOrBio">Belum masuk • Silakan login</p>
+            </div>
+        </section>
+
+        <nav class="menu" aria-label="Pengaturan">
+            <div class="item" onclick="openSection('personal.html')">
+                <i class="fa-solid fa-user-gear"></i>
+                <div class="meta">
+                    <div class="title">Profil</div>
+                    <div class="desc">Ubah nama, foto, dan info</div>
+                </div>
+                <i class="fa-solid fa-chevron-right" style="color:var(--muted)"></i>
+            </div>
+
+            <div class="item" onclick="openSection('payment.html')">
+                <i class="fa-solid fa-credit-card"></i>
+                <div class="meta">
+                    <div class="title">Metode Pembayaran</div>
+                    <div class="desc">Kartu & dompet digital</div>
+                </div>
+                <i class="fa-solid fa-chevron-right" style="color:var(--muted)"></i>
+            </div>
+
+            <div class="item" onclick="openSection('history.html')">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <div class="meta">
+                    <div class="title">Riwayat Transaksi</div>
+                    <div class="desc">Lihat pembelian sebelumnya</div>
+                </div>
+                <i class="fa-solid fa-chevron-right" style="color:var(--muted)"></i>
+            </div>
+
+            <div class="item" onclick="openSection('security.html')">
+                <i class="fa-solid fa-shield-halved"></i>
+                <div class="meta">
+                    <div class="title">Keamanan</div>
+                    <div class="desc">Atur autentikasi & privacy</div>
+                </div>
+                <i class="fa-solid fa-chevron-right" style="color:var(--muted)"></i>
+            </div>
+
+            <div class="item" onclick="openSection('setting.html')">
+                <i class="fa-solid fa-gear"></i>
+                <div class="meta">
+                    <div class="title">Setting</div>
+                    <div class="desc">Untuk mengatur tema dan lain-lain</div>
+                </div>
+                <i class="fa-solid fa-chevron-right" style="color:var(--muted)"></i>
+            </div>
+        </nav>
+
+        <div class="center-actions">
+            <button class="btn-primary" onclick="resetPassword()">Reset Password</button>
+        </div>
+
+        <div class="center-actions">
+            <button class="btn-primary" onclick="login()">Login</button>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
+            <div class="card"
+                style="padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);border:1px solid rgba(255,255,255,0.02);">
+                <div style="font-size:13px;color:var(--muted)">Saldo</div>
+                <div style="font-weight:700;margin-top:8px">Rp 0</div>
+            </div>
+            <div class="card"
+                style="padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);border:1px solid rgba(255,255,255,0.02);">
+                <div style="font-size:13px;color:var(--muted)">Voucher</div>
+                <div style="font-weight:700;margin-top:8px">0 Tersedia</div>
+            </div>
+        </div>
+
+        <div class="logout-wrap">
+            <button class="btn-danger" onclick="logout()">Logout</button>
+        </div>
+    </main>
+
+    <footer class="footer-menu">
+        <a href="index.html" class="footer-item page-link">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="#" class="footer-item">
+            <i class="fas fa-store"></i>
+            <span>Shop</span>
+        </a>
+        <a href="login.html" class="footer-item active">
+            <i class="fas fa-user"></i>
+            <span>Akun</span>
+        </a>
+    </footer>
+
+    <script>
+        function loadProfile() {
+            const logged = localStorage.getItem('loggedInUser');
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const profileName = document.getElementById('fullname');
+            const sub = document.getElementById('emailOrBio');
+            const avatarEl = document.getElementById('avatarEl');
+
+            if (logged) {
+                profileName.textContent = logged;
+                const u = users.find(x => x.username === logged);
+                if (u && u.email) sub.textContent = u.email;
+                else sub.textContent = 'Terdaftar • Selamat datang';
+                avatarEl.innerHTML = `<span style="font-weight:700">${(logged[0] || 'U').toUpperCase()}</span>`;
+            } else {
+                profileName.textContent = 'Guest';
+                sub.textContent = 'Belum masuk • Silakan login';
+                avatarEl.innerHTML = `<i class="fa-solid fa-user"></i>`;
+            }
+        }
+
+        function resetPassword() {
+            window.location.href = 'reset.html';
+        }
+
+        function login() {
+            // Simulasi login
+            const username = "User"; // Bisa diganti sesuai input nyata
+            const email = "user@example.com"; // Opsional
+            window.location.href = 'login1.html';
+
+            // Simpan data login ke localStorage
+            localStorage.setItem('loggedInUser', username);
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            if (!users.some(u => u.username === username)) {
+                users.push({ username: username, email: email });
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+
+            // Update tampilan profil
+            const profileName = document.getElementById('fullname');
+            const sub = document.getElementById('emailOrBio');
+            const avatarEl = document.getElementById('avatarEl');
+
+            profileName.textContent = username;
+            sub.textContent = 'Anda sudah login';
+            avatarEl.innerHTML = `<span style="font-weight:700">${(username[0] || 'U').toUpperCase()}</span>`;
+        }
+
+        function logout() {
+            localStorage.removeItem('loggedInUser');
+            loadProfile();
+        }
+
+        function openSection(url) {
+            window.location.href = url;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProfile();
+        });
+
+        document.querySelectorAll(".page-link").forEach(link => {
+            link.addEventListener("click", function (e) {
+                e.preventDefault();
+                const targetUrl = this.getAttribute("href");
+                document.body.classList.add("fade-out");
+                setTimeout(() => {
+                    window.location.href = targetUrl;
+                }, 500);
+            });
+        });
+    </script>
+</body>
+
+</html>

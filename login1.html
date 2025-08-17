@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Register Modern</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1f2937, #111827);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            width: 320px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .container.pop {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(37, 99, 235, 0.5);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-group input {
+            width: 100%;
+            height: 40px;
+            padding-left: 40px;
+            border: none;
+            border-radius: 10px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 14px;
+            line-height: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .input-group i {
+            position: absolute;
+            top: 50%;
+            left: 12px;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 18px;
+            pointer-events: none;
+            transition: color 0.3s ease;
+        }
+
+        .input-group label {
+            position: absolute;
+            left: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            pointer-events: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 8px rgba(37, 99, 235, 0.5);
+        }
+
+        .input-group input:focus+label,
+        .input-group input:not(:placeholder-shown)+label {
+            top: -8px;
+            font-size: 12px;
+            color: #2563eb;
+        }
+
+        .input-group input:focus~i {
+            color: #2563eb;
+        }
+
+        .error-msg {
+            color: #f87171;
+            font-size: 12px;
+            text-align: left;
+            margin-top: 4px;
+            min-height: 16px;
+            animation: shake 0.3s;
+        }
+
+        @keyframes shake {
+            0% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            50% {
+                transform: translateX(5px);
+            }
+
+            75% {
+                transform: translateX(-5px);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #2563eb;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(90deg, #2563eb, #1d4ed8);
+            transform: scale(1.05);
+        }
+
+        .toggle {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #93c5fd;
+            cursor: pointer;
+        }
+
+        /* Animasi slide + fade */
+        .form-box {
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
+
+        .slide-left {
+            transform: translateX(-50%);
+            opacity: 0;
+        }
+
+        .slide-right {
+            transform: translateX(50%);
+            opacity: 0;
+        }
+
+        .slide-in {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div id="form-box" class="form-box slide-in">
+            <h2 id="form-title">Login</h2>
+
+            <div class="input-group">
+                <i class="fa fa-user"></i>
+                <input type="text" id="username" placeholder=" " autocomplete="off">
+                <label for="username">Username</label>
+            </div>
+
+            <div class="input-group">
+                <i class="fa fa-lock"></i>
+                <input type="password" id="password" placeholder=" " autocomplete="off">
+                <label for="password">Password</label>
+            </div>
+
+            <div class="error-msg" id="error-msg"></div>
+
+            <button onclick="submitForm()">Login</button>
+            <div class="toggle" onclick="toggleForm()">Belum punya akun? Register</div>
+        </div>
+    </div>
+
+    <script>
+        let isLogin = true;
+        const accounts = JSON.parse(localStorage.getItem("accounts")) || [];
+
+        function toggleForm() {
+            const formBox = document.getElementById("form-box");
+            const container = document.querySelector(".container");
+
+            formBox.classList.remove("slide-in");
+            formBox.classList.add(isLogin ? "slide-left" : "slide-right");
+
+            container.classList.add("pop");
+            setTimeout(() => container.classList.remove("pop"), 300);
+
+            setTimeout(() => {
+                isLogin = !isLogin;
+                document.getElementById("form-title").innerText = isLogin ? "Login" : "Register";
+                document.querySelector("button").innerText = isLogin ? "Login" : "Register";
+                document.querySelector(".toggle").innerText = isLogin
+                    ? "Belum punya akun? Register"
+                    : "Sudah punya akun? Login";
+
+                document.getElementById("username").value = "";
+                document.getElementById("password").value = "";
+                document.getElementById("error-msg").innerText = "";
+
+                formBox.classList.remove("slide-left", "slide-right");
+                formBox.classList.add("slide-in");
+            }, 400);
+        }
+
+        function submitForm() {
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const errorMsg = document.getElementById("error-msg");
+
+            errorMsg.innerText = "";
+
+            if (!username || !password) {
+                errorMsg.innerText = "Harap isi semua field!";
+                return;
+            }
+
+            if (isLogin) {
+                const user = accounts.find(acc => acc.username === username && acc.password === password);
+                if (user) {
+                    window.location.href = "login.html"; // Ganti ke link tujuan
+                } else {
+                    errorMsg.innerText = "Username atau password salah!";
+                    document.getElementById("form-box").classList.remove("slide-in");
+                    document.getElementById("form-box").classList.add("slide-left");
+                    setTimeout(() => {
+                        document.getElementById("form-box").classList.remove("slide-left");
+                        document.getElementById("form-box").classList.add("slide-in");
+                    }, 300);
+                }
+            } else {
+                if (accounts.some(acc => acc.username === username)) {
+                    errorMsg.innerText = "Username sudah terdaftar!";
+                    return;
+                }
+                accounts.push({ username, password });
+                localStorage.setItem("accounts", JSON.stringify(accounts));
+
+                // Setelah register → langsung ke login
+                toggleForm();
+            }
+        }
+    </script>
+
+</body>
+
+</html>
